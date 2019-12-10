@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.mapper.GoodsMapper">
+  <resultMap id="BaseResultMap" type="com.qf.entity.Goods">
+    <!--@mbg.generated-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="images_path" jdbcType="VARCHAR" property="imagesPath" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="phone_id" jdbcType="INTEGER" property="phoneId" />
+    <result column="film_id" jdbcType="INTEGER" property="filmId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, images_path, `count`, price, phone_id, film_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from t_goods
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from t_goods
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.qf.entity.Goods" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_goods (`name`, images_path, `count`, 
+      price, phone_id, film_id
+      )
+    values (#{name,jdbcType=VARCHAR}, #{imagesPath,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, 
+      #{price,jdbcType=DOUBLE}, #{phoneId,jdbcType=INTEGER}, #{filmId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.qf.entity.Goods" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_goods
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="imagesPath != null">
+        images_path,
+      </if>
+      <if test="count != null">
+        `count`,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="phoneId != null">
+        phone_id,
+      </if>
+      <if test="filmId != null">
+        film_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="imagesPath != null">
+        #{imagesPath,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null">
+        #{count,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="phoneId != null">
+        #{phoneId,jdbcType=INTEGER},
+      </if>
+      <if test="filmId != null">
+        #{filmId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qf.entity.Goods">
+    <!--@mbg.generated-->
+    update t_goods
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="imagesPath != null">
+        images_path = #{imagesPath,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null">
+        `count` = #{count,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="phoneId != null">
+        phone_id = #{phoneId,jdbcType=INTEGER},
+      </if>
+      <if test="filmId != null">
+        film_id = #{filmId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getGoodsSearch" resultMap="BaseResultMap" parameterType="string">
+    <!--select distinct g1.* from
+    (SELECT distinct g.id,g.name,
+    g.images_path,g.count,g.price,g.phone_id,g.film_id,g.phoneName,f.name AS filmName FROM
+    (SELECT god.*,p.phonename AS phoneName FROM t_goods god LEFT JOIN phone p
+    ON god.phone_id = p.id
+    <if test="_parameter != null and _parameter != ''">
+      AND p.phonename LIKE CONCAT('%',#{rs},'%')
+    </if>
+    ) as g
+    LEFT JOIN film f ON f.id = g.film_id
+    <if test="_parameter != null and _parameter != ''">
+      AND f.name LIKE CONCAT('%',#{rs},'%')
+    </if>
+    ) as g1
+    <if test="_parameter != null and _parameter != ''">
+      where g1.name LIKE CONCAT('%',#{rs},'%')
+    </if>-->
+
+      select distinct g1.* from
+      (SELECT distinct g.id,g.name,
+      g.images_path,g.count,g.price,g.phone_id,g.film_id,g.phoneName,f.name AS filmName FROM
+      (SELECT god.*,p.phonename AS phoneName FROM t_goods god LEFT JOIN phone p
+      ON god.phone_id = p.id
+
+      ) as g
+      LEFT JOIN film f ON f.id = g.film_id
+
+      ) as g1
+      <if test="_parameter != null and _parameter != ''">
+      WHERE
+      g1.name LIKE CONCAT('%',#{rs},'%') OR g1.filmName LIKE CONCAT('%',#{rs},'%') OR g1.phoneName LIKE CONCAT('%',#{rs},'%')
+      </if>
+
+
+    <!--SELECT distinct g.id,g.name,g.images_path,g.count,g.price,g.phone_id,g.film_id FROM t_goods g
+    <if test="_parameter != null and _parameter != ''">
+      ,film f,phone p
+      WHERE g.film_id = f.id
+      AND g.phone_id = p.id
+      AND (g.name LIKE CONCAT('%',#{rs},'%') OR f.name LIKE CONCAT('%',#{rs},'%') OR p.phonename LIKE CONCAT('%',#{rs},'%'))
+    </if>-->
+  </select>
+  <update id="updateByPrimaryKey" parameterType="com.qf.entity.Goods">
+    <!--@mbg.generated-->
+    update t_goods
+    set `name` = #{name,jdbcType=VARCHAR},
+      images_path = #{imagesPath,jdbcType=VARCHAR},
+      `count` = #{count,jdbcType=INTEGER},
+      price = #{price,jdbcType=DOUBLE},
+      phone_id = #{phoneId,jdbcType=INTEGER},
+      film_id = #{filmId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="getGoodsByPhoneId" resultMap="BaseResultMap" parameterType="int">
+      select distinct g1.* from
+      (SELECT distinct g.id,g.name,
+      g.images_path,g.count,g.price,g.phone_id,g.film_id,g.phoneName,f.name AS filmName FROM
+      (SELECT god.*,p.phonename AS phoneName FROM t_goods god LEFT JOIN phone p
+      ON god.phone_id = p.id
+      ) as g
+      LEFT JOIN film f ON f.id = g.film_id
+      ) as g1
+      where phone_id = #{id}
+    </select>
+    <select id="getGoodsByFilmId" resultMap="BaseResultMap" parameterType="int">
+      select distinct g1.* from
+      (SELECT distinct g.id,g.name,
+      g.images_path,g.count,g.price,g.phone_id,g.film_id,g.phoneName,f.name AS filmName FROM
+      (SELECT god.*,p.phonename AS phoneName FROM t_goods god LEFT JOIN phone p
+      ON god.phone_id = p.id
+      ) as g
+      LEFT JOIN film f ON f.id = g.film_id
+      ) as g1
+      where film_id = #{id}
+    </select>
+  <delete id="deleteBatch">
+    delete from t_goods where id in
+    <foreach collection="ids" separator="," open="(" close=")" item="id">
+      #{id}
+    </foreach>
+  </delete>
+    <update id="updateGoodsCount">
+      update t_goods set count=count-#{count} where id = #{goodsId};
+    </update>
+    <update id="batchUpdateCount" parameterType="java.util.List">
+      <foreach collection="list" item="g" separator=";">
+        update t_goods
+       <set>
+        count = count-#{g.count}
+       </set>
+        where id = #{g.goodsId}
+      </foreach>
+    </update>
+  <update id="deleteByFilmId">
+    update t_goods set film_id = null where film_id =
+    (select id from film where phone_id = #{filmByProductId})
+  </update>
+  <update id="deleteByFilmIdOne" parameterType="int">
+    update t_goods set film_id=null where film_id=#{filmId}
+  </update>
+  <update id="deletePhoneIdBatch" parameterType="int">
+    update t_goods set phone_id=null where phone_id=
+    (select id from phone where brand_id =#{phones})
+  </update>
+  <update id="deletePhoneId" parameterType="int">
+    update t_goods set phone_id=null where phone_id=#{phoneId}
+  </update>
+    <select id="getGoodsByPhoneFilm" resultType="com.qf.entity.Goods">
+      select distinct g1.* from
+      (SELECT distinct g.id,g.name,
+      g.images_path,g.count,g.price,g.phone_id,g.film_id,g.phoneName,f.name AS filmName FROM
+      (SELECT god.*,p.phonename AS phoneName FROM t_goods god LEFT JOIN phone p
+      ON god.phone_id = p.id
+
+      ) as g
+      LEFT JOIN film f ON f.id = g.film_id
+
+      ) as g1
+       where phone_id=#{phoneId} and film_id=#{filmId} and name=#{goodsName}
+    </select>
+  <select id="getGoodsByGoodsId" resultType="com.qf.entity.Goods" parameterType="int">
+      select distinct g1.* from
+      (SELECT distinct g.id,g.name,
+      g.images_path,g.count,g.price,g.phone_id,g.film_id,g.phoneName,f.name AS filmName FROM
+      (SELECT god.*,p.phonename AS phoneName FROM t_goods god LEFT JOIN phone p
+      ON god.phone_id = p.id
+
+      ) as g
+      LEFT JOIN film f ON f.id = g.film_id
+
+      ) as g1
+      where g1.id = #{goodsId}
+  </select>
+
+</mapper>

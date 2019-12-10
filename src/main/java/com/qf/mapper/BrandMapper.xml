@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.mapper.BrandMapper">
+  <resultMap id="BaseResultMap" type="com.qf.entity.Brand">
+    <!--@mbg.generated-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="phonename" jdbcType="VARCHAR" property="phonename" />
+    <result column="phoneimage" jdbcType="VARCHAR" property="phoneimage" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, phonename, phoneimage
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from brand
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from brand
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.qf.entity.Brand" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into brand (phonename, phoneimage)
+    values (#{phonename,jdbcType=VARCHAR}, #{phoneimage,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.qf.entity.Brand" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into brand
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="phonename != null">
+        phonename,
+      </if>
+      <if test="phoneimage != null">
+        phoneimage,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="phonename != null">
+        #{phonename,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneimage != null">
+        #{phoneimage,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qf.entity.Brand">
+    <!--@mbg.generated-->
+    update brand
+    <set>
+      <if test="phonename != null">
+        phonename = #{phonename,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneimage != null">
+        phoneimage = #{phoneimage,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qf.entity.Brand">
+    <!--@mbg.generated-->
+    update brand
+    set phonename = #{phonename,jdbcType=VARCHAR},
+      phoneimage = #{phoneimage,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="getAllBrand" resultMap="BaseResultMap">
+      select * from brand
+    </select>
+    <select id="getBrandByBrandName" resultMap="BaseResultMap" parameterType="string">
+      select * from brand where phonename = #{brandName}
+    </select>
+</mapper>

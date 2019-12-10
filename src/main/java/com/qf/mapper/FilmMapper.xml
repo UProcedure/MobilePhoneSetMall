@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.mapper.FilmMapper">
+  <resultMap id="BaseResultMap" type="com.qf.entity.Film">
+    <!--@mbg.generated-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="filmimage" jdbcType="VARCHAR" property="filmimage" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="phone_id" jdbcType="INTEGER" property="phoneId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, filmimage, product_id, phone_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from film
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from film
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.qf.entity.Film" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into film (`name`, filmimage, product_id, 
+      phone_id)
+    values (#{name,jdbcType=VARCHAR}, #{filmimage,jdbcType=VARCHAR}, #{productId,jdbcType=INTEGER}, 
+      #{phoneId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.qf.entity.Film" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into film
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="filmimage != null">
+        filmimage,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="phoneId != null">
+        phone_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="filmimage != null">
+        #{filmimage,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="phoneId != null">
+        #{phoneId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qf.entity.Film">
+    <!--@mbg.generated-->
+    update film
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="filmimage != null">
+        filmimage = #{filmimage,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="phoneId != null">
+        phone_id = #{phoneId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qf.entity.Film">
+    <!--@mbg.generated-->
+    update film
+    set `name` = #{name,jdbcType=VARCHAR},
+      filmimage = #{filmimage,jdbcType=VARCHAR},
+      product_id = #{productId,jdbcType=INTEGER},
+      phone_id = #{phoneId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="getFilmByProductId"  resultType="com.qf.entity.Film" parameterType="int">
+      select * from film where product_id = #{productsId} and product_id is not null
+    </select>
+    <select id="getFilmByFilmNameProductId" resultMap="BaseResultMap">
+      select * from film where name = #{filmName} and product_id = #{productId}
+    </select>
+    <delete id="deleteByProductId">
+      delete from film where phone_id = #{productId}
+    </delete>
+  <select id="getCountByProductId" resultType="int" parameterType="int">
+    select count from film where product_id = #{productsId}
+  </select>
+</mapper>

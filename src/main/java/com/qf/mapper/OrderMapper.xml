@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.mapper.OrderMapper">
+  <resultMap id="BaseResultMap" type="com.qf.entity.Order">
+    <!--@mbg.generated-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="sendtype" jdbcType="VARCHAR" property="sendtype" />
+    <result column="date" jdbcType="DATE" property="date" />
+    <result column="address_id" jdbcType="INTEGER" property="addressId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, sendtype, `date`, address_id, user_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from t_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from t_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.qf.entity.Order" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_order (sendtype, `date`, address_id, 
+      user_id)
+    values (#{sendtype,jdbcType=VARCHAR}, #{date,jdbcType=DATE}, #{addressId,jdbcType=INTEGER}, 
+      #{userId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.qf.entity.Order" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sendtype != null">
+        sendtype,
+      </if>
+      <if test="date != null">
+        `date`,
+      </if>
+      <if test="addressId != null">
+        address_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sendtype != null">
+        #{sendtype,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        #{date},
+      </if>
+      <if test="addressId != null">
+        #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qf.entity.Order">
+    <!--@mbg.generated-->
+    update t_order
+    <set>
+      <if test="sendtype != null">
+        sendtype = #{sendtype,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        `date` = #{date,jdbcType=DATE},
+      </if>
+      <if test="addressId != null">
+        address_id = #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qf.entity.Order">
+    <!--@mbg.generated-->
+    update t_order
+    set sendtype = #{sendtype,jdbcType=VARCHAR},
+      `date` = #{date,jdbcType=DATE},
+      address_id = #{addressId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="getAllOrder"  resultType="order">
+     SELECT a.*,u.username AS userName FROM
+(select o.id ,o.sendtype ,o.date, o.address_id,o.user_id,adr.address as addressName,adr.addressee as adree
+from t_order o LEFT JOIN t_receiving_address adr ON o.address_id=adr.id) as a
+LEFT JOIN user u ON a.user_id = u.id
+    </select>
+  <select id="getOrderByusernameList" resultType="com.qf.entity.Order" parameterType="String">
+    select * from
+    (SELECT a.*,u.username AS userName FROM
+    (select o.id ,o.sendtype ,o.date, o.address_id,o.user_id,adr.address as addressName,adr.addressee as adree
+    from t_order o LEFT JOIN t_receiving_address adr ON o.address_id=adr.id) as a
+    LEFT JOIN user u ON a.user_id = u.id) as b  where b.userName LIKE CONCAT('%',#{byUserName},'%')
+  </select>
+  <delete id="deleteBatch">
+  delete from t_order where id in
+  <foreach collection="ids" separator="," open="(" close=")" item="id">
+    #{id}
+  </foreach>
+  </delete>
+    <delete id="deleteByUserId" parameterType="int">
+      delete from t_order where user_id = #{userId}
+    </delete>
+</mapper>
